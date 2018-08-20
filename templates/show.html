@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="jumbotron">
+  <h1 class="display-4">{{ library.NAME }}</h1>
+  <p class="lead">{{ library.HOUSENUM }} {{ library.STREETNAME }}, {{ library.CITY }} {{ library.ZIP }}</p>
+</div>
+
+<div class="row mb-5">
+  <div class="col-5">
+    <h3>More info</h3>
+    <p><a href="{{ library.URL }}">Website</a></p>
+    <p>Library system: {{ library.SYSTEM }}</p>
+    <p>Borough code: {{ library.BOROCODE }}</p>
+  </div>
+  <div class="col-7">
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+   crossorigin=""/>
+ <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+   integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+   crossorigin=""></script>
+ <div id="mapid"></div>
+  <style>
+  #mapid { height: 400px; }
+  </style>
+<script>
+  var map = L.map('mapid').setView([{{ library.latitude }}, {{ library.longitude}}], 11);
+
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+  subdomains: 'abcd',
+  minZoom: 1,
+  maxZoom: 16,
+  ext: 'png'
+}).addTo(map)
+
+var marker = L.marker([{{ library.latitude }}, {{ library.longitude }}]).addTo(map);
+marker.bindPopup("{{ library.NAME }}").openPopup();
+</script>
+
+
+
+{% endblock %}
+
